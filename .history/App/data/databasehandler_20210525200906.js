@@ -1,5 +1,4 @@
 import * as SQLite from "expo-sqlite";
-import Toast from "react-native-simple-toast";
 
 // inserting transaction data
 export const Insert = (description, amount, date, type) => {
@@ -11,6 +10,7 @@ export const Insert = (description, amount, date, type) => {
   } else {
     expType = "Expense";
   }
+  console.log(description, amount, date, expType);
   db.transaction((tx) => {
     tx.executeSql(
       "create table if not exists transactions (id integer primary key autoincrement, amount int, description text, date text,type text);",
@@ -21,10 +21,11 @@ export const Insert = (description, amount, date, type) => {
       "insert into transactions (description, amount,date,type) values (?, ? , ?, ?)",
       [description, amount, date, expType],
       (_, results) => {
+        console.log("Results", results.rowsAffected);
         if (results.rowsAffected > 0) {
-          Toast.show("Added");
+          console.log("Insert Success");
         } else {
-          Toast.show("Error occurred...Please try again");
+          console.log("Insert Failed");
         }
       }
     );

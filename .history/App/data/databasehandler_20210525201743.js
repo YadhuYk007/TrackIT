@@ -24,7 +24,7 @@ export const Insert = (description, amount, date, type) => {
         if (results.rowsAffected > 0) {
           Toast.show("Added");
         } else {
-          Toast.show("Error occurred...Please try again");
+          Toast.show("Error occured...Please try again");
         }
       }
     );

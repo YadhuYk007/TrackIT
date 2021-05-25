@@ -20,7 +20,8 @@ const Details = (props) => {
     Toast.show("Deleted");
     props.onDelete();
     deleteData({ db }, props.id).catch(function (error) {
-      Toast.show("Some error occurred...Please try again");
+      Toast.show("Some error occured...Please try again");
+      console.log(`Error ${error.message}`);
     });
     props.close();
   };
@@ -44,11 +45,7 @@ const Details = (props) => {
           <AntDesign name="close" size={24} color="gray" />
         </TouchableOpacity>
       </SafeAreaView>
-      <Text
-        style={
-          props.type === "Income" ? Style.incomeAmount : Style.expenseAmount
-        }
-      >
+      <Text style={props.type === "Income" ? Style.IncAmount : Style.ExpAmount}>
         {"\u20B9"}
         {props.amt}
       </Text>

@@ -3,37 +3,28 @@ import {
   View,
   Text,
   StyleSheet,
+  SafeAreaView,
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import * as SQLite from "expo-sqlite";
 import dayjs from "dayjs";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import Toast from "react-native-simple-toast";
-import { AntDesign } from "@expo/vector-icons";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import Color from "../constants/Colors";
-import { update } from "../data/databasehandler";
 
-const Edit = (props) => {
-  const db = SQLite.openDatabase("trackitdb.db");
-  const editTxt = "Edit ";
-  const [amount, setAmt] = useState(props.amt.toString());
-  const [description, setDescription] = useState(props.desc);
-  const [activeFlag, setActiveFlag] = useState(props.toggle);
-  const [date, setDate] = useState(dayjs(props.date).format("MMMM D, YYYY"));
+import { Insert } from "../data/databasehandler";
+
+const Add = ({ isClicked }) => {
+  const [amount, setAmt] = useState("");
+  const [description, setDesc] = useState("");
+  const [activeFlag, setActiveFlag] = useState(false);
+  const [date, setDate] = useState(dayjs().format("MMMM D, YYYY"));
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   return (
-    <View>
-      <Text style={Style.header}>
-        {editTxt}
-        {props.type}
-      </Text>
-
-      <View style={Style.close}>
-        <TouchableOpacity onPress={() => props.close()}>
-          <AntDesign name="close" size={24} color="gray" />
-        </TouchableOpacity>
+    <SafeAreaView>
+      <View style={Style.header}>
+        <Text style={Style.title}> Add Income/Expense</Text>
       </View>
 
       {/* Custom Toggle for Type */}
@@ -64,10 +55,9 @@ const Edit = (props) => {
           value={amount}
           placeholder="Amount"
         />
-
         <TextInput
           style={Style.input}
-          onChangeText={setDescription}
+          onChangeText={setDesc}
           value={description}
           placeholder="Description"
         />
@@ -77,23 +67,23 @@ const Edit = (props) => {
             setShowDatePicker(true);
           }}
         >
-          <Text style={Style.dateText}>{JSON.stringify(date)}</Text>
+          <Text style={Style.DateText}>{JSON.stringify(date)}</Text>
         </TouchableOpacity>
         {showDatePicker ? (
           <DateTimePicker
             testID="dateTimePicker"
-            value={new Date(date)}
+            value={date}
             mode="date"
             display="default"
             onChange={(e, selectedDate) => {
               const currentDate =
                 dayjs(selectedDate).format("MMMM D, YYYY") || date;
+              console.log(currentDate);
               setDate(currentDate);
               setShowDatePicker(false);
             }}
           />
         ) : null}
-
         <TouchableOpacity
           onPress={() => {
             if (amount === "" || amount === null) {
@@ -101,31 +91,45 @@ const Edit = (props) => {
             } else if (description === "" || description === null) {
               Toast.show("Please enter Description");
             } else {
-              // Toast.show("Valid Data");
-              props.close();
-              update({ db }, props.id, amount, description, date, activeFlag);
+              Insert(description, amount, date, activeFlag);
+              isClicked();
             }
           }}
         >
           <Text style={Style.save}>Save</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const Style = StyleSheet.create({
   header: {
-    alignSelf: "center",
-    marginTop: 16,
-    color: Color.lightBlack,
-    fontSize: 18,
+    height: 100,
+    alignItems: "center",
   },
-  close: {
-    alignSelf: "flex-end",
-    right: 16,
-    top: 16,
-    position: "absolute",
+  title: {
+    margin: 15,
+    fontSize: 20,
+  },
+  toggle: {
+    flexDirection: "row",
+    alignSelf: "center",
+    marginHorizontal: 80,
+  },
+  toggleButtonOff: {
+    color: Color.yellow,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    flex: 6,
+  },
+  toggleButtonOn: {
+    color: Color.white,
+    backgroundColor: Color.yellow,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    flex: 6,
+    borderRadius: 12,
   },
   textBoxes: {
     backgroundColor: Color.white,
@@ -154,29 +158,16 @@ const Style = StyleSheet.create({
     fontWeight: "bold",
     alignSelf: "center",
   },
-  dateText: {
+  DateText: {
     color: Color.lightBlack,
     marginVertical: 8,
   },
-  toggle: {
-    marginVertical: 30,
-    flexDirection: "row",
-    alignSelf: "center",
-    marginHorizontal: 80,
-  },
-  toggleButtonOff: {
-    color: Color.yellow,
-    paddingVertical: 20,
-    paddingHorizontal: 20,
-    flex: 6,
-  },
-  toggleButtonOn: {
-    color: Color.white,
-    backgroundColor: Color.yellow,
-    paddingVertical: 20,
-    paddingHorizontal: 20,
-    flex: 6,
-    borderRadius: 12,
+  close: {
+    alignSelf: "flex-end",
+    position: "absolute",
+    right: 16,
+    top: 16,
   },
 });
-export default Edit;
+
+export default Add;

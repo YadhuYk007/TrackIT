@@ -15,6 +15,7 @@ import Color from "../constants/Colors";
 import { update } from "../data/databasehandler";
 
 const Edit = (props) => {
+  console.log(JSON.stringify(props));
   const db = SQLite.openDatabase("trackitdb.db");
   const editTxt = "Edit ";
   const [amount, setAmt] = useState(props.amt.toString());
@@ -46,17 +47,15 @@ const Edit = (props) => {
             Income
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setActiveFlag(false)}>
-          <Text
-            style={[activeFlag ? Style.toggleButtonOff : Style.toggleButtonOn]}
-          >
+        <TouchableOpacity onPress={() => setactiveflag(false)}>
+          <Text style={[activeflag ? Style.togglebtnOff : Style.togglebtnOn]}>
             {" "}
             Expense
           </Text>
         </TouchableOpacity>
       </View>
 
-      <View style={Style.textBoxes}>
+      <View style={Style.textboxes}>
         <TextInput
           style={Style.input}
           keyboardType="number-pad"
@@ -67,7 +66,7 @@ const Edit = (props) => {
 
         <TextInput
           style={Style.input}
-          onChangeText={setDescription}
+          onChangeText={setDesc}
           value={description}
           placeholder="Description"
         />
@@ -77,7 +76,7 @@ const Edit = (props) => {
             setShowDatePicker(true);
           }}
         >
-          <Text style={Style.dateText}>{JSON.stringify(date)}</Text>
+          <Text style={Style.DateText}>{JSON.stringify(date)}</Text>
         </TouchableOpacity>
         {showDatePicker ? (
           <DateTimePicker
@@ -88,6 +87,7 @@ const Edit = (props) => {
             onChange={(e, selectedDate) => {
               const currentDate =
                 dayjs(selectedDate).format("MMMM D, YYYY") || date;
+              console.log(currentDate);
               setDate(currentDate);
               setShowDatePicker(false);
             }}
@@ -103,7 +103,7 @@ const Edit = (props) => {
             } else {
               // Toast.show("Valid Data");
               props.close();
-              update({ db }, props.id, amount, description, date, activeFlag);
+              update({ db }, props.id, amount, description, date, activeflag);
             }
           }}
         >

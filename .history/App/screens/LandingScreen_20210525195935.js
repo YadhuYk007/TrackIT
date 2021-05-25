@@ -11,17 +11,17 @@ import Details from "../components/Details";
 
 const LandingScreen = () => {
   const [saveClicked, setSaveClicked] = useState(false);
-  const [trigger, setTrigger] = useState(0);
-  const [description, setDescription] = useState(null);
+  const [trigger, settrigger] = useState(0);
+  const [desc, setDesc] = useState(null);
   const [id, setId] = useState(null);
   const [amount, setAmount] = useState(null);
   const [type, setType] = useState(null);
-  const [itemDate, setItemDate] = useState(null);
+  const [itmDate, setitmDate] = useState(null);
   const modalizeRef = useRef(null);
   const detailsModalizeRef = useRef(null);
   const DetailsRef = useRef(null);
   return (
-    <SafeAreaView style={Style.mainContainer}>
+    <SafeAreaView style={Style.maincontainer}>
       <StatusBar backgroundColor={Colors.yellow} />
       <View style={Style.header}>
         <Text style={Style.title}>TrackIt</Text>
@@ -37,9 +37,9 @@ const LandingScreen = () => {
           invoker={trigger}
           clicked={() => DetailsRef.current?.open()}
           setAmount={(param) => setAmount(param)}
-          setDate={(param) => setItemDate(param)}
+          setDate={(param) => setitmDate(param)}
           setId={(param) => setId(param)}
-          setDesc={(param) => setDescription(param)}
+          setDesc={(param) => setDesc(param)}
           setType={(param) => setType(param)}
         />
       </View>
@@ -55,15 +55,15 @@ const LandingScreen = () => {
       </Modalize>
       {saveClicked ? modalizeRef.current?.close() : null}
       {saveClicked ? setSaveClicked(false) : null}
-      {saveClicked ? setTrigger(trigger + 1) : null}
+      {saveClicked ? settrigger(trigger + 1) : null}
 
       {/* BottomSheet for displaying Details */}
       <Modalize ref={DetailsRef} withHandle={false}>
         <Details
           id={id}
-          desc={description}
+          desc={desc}
           amt={amount}
-          date={itemDate}
+          date={itmDate}
           type={type}
           close={() => {
             return DetailsRef.current?.close();
@@ -73,7 +73,7 @@ const LandingScreen = () => {
             detailsModalizeRef.current?.open();
           }}
           onDelete={() => {
-            setTrigger(trigger + 1);
+            settrigger(trigger + 1);
           }}
         />
       </Modalize>
@@ -83,13 +83,13 @@ const LandingScreen = () => {
         <Edit
           id={id}
           type={type}
-          date={itemDate}
-          desc={description}
+          date={itmDate}
+          desc={desc}
           amt={amount}
           // eslint-disable-next-line no-unneeded-ternary
           toggle={type === "Income" ? true : false}
           close={() => {
-            setTrigger(trigger + 1);
+            settrigger(trigger + 1);
             return detailsModalizeRef.current?.close();
           }}
         />

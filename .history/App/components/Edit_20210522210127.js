@@ -14,12 +14,79 @@ import { AntDesign } from "@expo/vector-icons";
 import Color from "../constants/Colors";
 import { update } from "../data/databasehandler";
 
+const Style = StyleSheet.create({
+  header: {
+    alignSelf: "center",
+    marginTop: 16,
+    color: Color.lightBlack,
+    fontSize: 18,
+  },
+  close: {
+    alignSelf: "flex-end",
+    right: 16,
+    top: 16,
+    position: "absolute",
+  },
+  textboxes: {
+    backgroundColor: Color.white,
+    flexDirection: "column",
+    height: 450,
+    marginTop: 15,
+  },
+  input: {
+    margin: 15,
+    height: 45,
+    borderColor: Color.grey,
+    borderRadius: 10,
+    borderWidth: 1,
+    paddingLeft: 8,
+    color: Color.lightBlack,
+  },
+  saperator: {
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: Color.lightBlack,
+    height: 55,
+  },
+  save: {
+    paddingVertical: 15,
+    alignContent: "center",
+    color: Color.yellow,
+    fontWeight: "bold",
+    alignSelf: "center",
+  },
+  DateText: {
+    color: Color.lightBlack,
+    marginVertical: 8,
+  },
+  toggle: {
+    marginVertical: 30,
+    flexDirection: "row",
+    alignSelf: "center",
+    marginHorizontal: 80,
+  },
+  togglebtnOff: {
+    color: Color.yellow,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    flex: 6,
+  },
+  togglebtnOn: {
+    color: Color.white,
+    backgroundColor: Color.yellow,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    flex: 6,
+    borderRadius: 12,
+  },
+});
+
 const Edit = (props) => {
+  console.log(JSON.stringify(props));
   const db = SQLite.openDatabase("trackitdb.db");
   const editTxt = "Edit ";
   const [amount, setAmt] = useState(props.amt.toString());
-  const [description, setDescription] = useState(props.desc);
-  const [activeFlag, setActiveFlag] = useState(props.toggle);
+  const [description, setDesc] = useState(props.desc);
+  const [activeflag, setactiveflag] = useState(props.toggle);
   const [date, setDate] = useState(dayjs(props.date).format("MMMM D, YYYY"));
   const [showDatePicker, setShowDatePicker] = useState(false);
 
@@ -38,25 +105,21 @@ const Edit = (props) => {
 
       {/* Custom Toggle for Type */}
       <View style={Style.toggle}>
-        <TouchableOpacity onPress={() => setActiveFlag(true)}>
-          <Text
-            style={[activeFlag ? Style.toggleButtonOn : Style.toggleButtonOff]}
-          >
+        <TouchableOpacity onPress={() => setactiveflag(true)}>
+          <Text style={[activeflag ? Style.togglebtnOn : Style.togglebtnOff]}>
             {" "}
             Income
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setActiveFlag(false)}>
-          <Text
-            style={[activeFlag ? Style.toggleButtonOff : Style.toggleButtonOn]}
-          >
+        <TouchableOpacity onPress={() => setactiveflag(false)}>
+          <Text style={[activeflag ? Style.togglebtnOff : Style.togglebtnOn]}>
             {" "}
             Expense
           </Text>
         </TouchableOpacity>
       </View>
 
-      <View style={Style.textBoxes}>
+      <View style={Style.textboxes}>
         <TextInput
           style={Style.input}
           keyboardType="number-pad"
@@ -67,7 +130,7 @@ const Edit = (props) => {
 
         <TextInput
           style={Style.input}
-          onChangeText={setDescription}
+          onChangeText={setDesc}
           value={description}
           placeholder="Description"
         />
@@ -77,7 +140,7 @@ const Edit = (props) => {
             setShowDatePicker(true);
           }}
         >
-          <Text style={Style.dateText}>{JSON.stringify(date)}</Text>
+          <Text style={Style.DateText}>{JSON.stringify(date)}</Text>
         </TouchableOpacity>
         {showDatePicker ? (
           <DateTimePicker
@@ -88,6 +151,7 @@ const Edit = (props) => {
             onChange={(e, selectedDate) => {
               const currentDate =
                 dayjs(selectedDate).format("MMMM D, YYYY") || date;
+              console.log(currentDate);
               setDate(currentDate);
               setShowDatePicker(false);
             }}
@@ -103,7 +167,7 @@ const Edit = (props) => {
             } else {
               // Toast.show("Valid Data");
               props.close();
-              update({ db }, props.id, amount, description, date, activeFlag);
+              update({ db }, props.id, amount, description, date, activeflag);
             }
           }}
         >
@@ -113,70 +177,4 @@ const Edit = (props) => {
     </View>
   );
 };
-
-const Style = StyleSheet.create({
-  header: {
-    alignSelf: "center",
-    marginTop: 16,
-    color: Color.lightBlack,
-    fontSize: 18,
-  },
-  close: {
-    alignSelf: "flex-end",
-    right: 16,
-    top: 16,
-    position: "absolute",
-  },
-  textBoxes: {
-    backgroundColor: Color.white,
-    flexDirection: "column",
-    height: 450,
-    marginTop: 15,
-  },
-  input: {
-    margin: 15,
-    height: 45,
-    borderColor: Color.grey,
-    borderRadius: 10,
-    borderWidth: 1,
-    paddingLeft: 8,
-    color: Color.lightBlack,
-  },
-  separator: {
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: Color.lightBlack,
-    height: 55,
-  },
-  save: {
-    paddingVertical: 15,
-    alignContent: "center",
-    color: Color.yellow,
-    fontWeight: "bold",
-    alignSelf: "center",
-  },
-  dateText: {
-    color: Color.lightBlack,
-    marginVertical: 8,
-  },
-  toggle: {
-    marginVertical: 30,
-    flexDirection: "row",
-    alignSelf: "center",
-    marginHorizontal: 80,
-  },
-  toggleButtonOff: {
-    color: Color.yellow,
-    paddingVertical: 20,
-    paddingHorizontal: 20,
-    flex: 6,
-  },
-  toggleButtonOn: {
-    color: Color.white,
-    backgroundColor: Color.yellow,
-    paddingVertical: 20,
-    paddingHorizontal: 20,
-    flex: 6,
-    borderRadius: 12,
-  },
-});
 export default Edit;

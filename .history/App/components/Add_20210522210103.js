@@ -14,11 +14,78 @@ import Color from "../constants/Colors";
 
 import { Insert } from "../data/databasehandler";
 
+const Style = StyleSheet.create({
+  header: {
+    height: 100,
+    alignItems: "center",
+  },
+  title: {
+    margin: 15,
+    fontSize: 20,
+  },
+  toggle: {
+    flexDirection: "row",
+    alignSelf: "center",
+    marginHorizontal: 80,
+  },
+  togglebtnOff: {
+    color: Color.yellow,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    flex: 6,
+  },
+  togglebtnOn: {
+    color: Color.white,
+    backgroundColor: Color.yellow,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    flex: 6,
+    borderRadius: 12,
+  },
+  textboxes: {
+    backgroundColor: Color.white,
+    flexDirection: "column",
+    height: 450,
+    marginTop: 15,
+  },
+  input: {
+    margin: 15,
+    height: 45,
+    borderColor: Color.grey,
+    borderRadius: 10,
+    borderWidth: 1,
+    paddingLeft: 8,
+    color: Color.lightBlack,
+  },
+  saperator: {
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: Color.lightBlack,
+    height: 55,
+  },
+  save: {
+    paddingVertical: 15,
+    alignContent: "center",
+    color: Color.yellow,
+    fontWeight: "bold",
+    alignSelf: "center",
+  },
+  DateText: {
+    color: Color.lightBlack,
+    marginVertical: 8,
+  },
+  close: {
+    alignSelf: "flex-end",
+    position: "absolute",
+    right: 16,
+    top: 16,
+  },
+});
+
 const Add = ({ isClicked }) => {
   const [amount, setAmt] = useState("");
   const [description, setDesc] = useState("");
-  const [activeFlag, setActiveFlag] = useState(false);
-  const [date, setDate] = useState(dayjs().format("MMMM D, YYYY"));
+  const [activeflag, setactiveflag] = useState(false);
+  const [date, setDate] = useState((dayjs().format("MMMM D, YYYY"));
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   return (
@@ -29,25 +96,21 @@ const Add = ({ isClicked }) => {
 
       {/* Custom Toggle for Type */}
       <View style={Style.toggle}>
-        <TouchableOpacity onPress={() => setActiveFlag(true)}>
-          <Text
-            style={[activeFlag ? Style.toggleButtonOn : Style.toggleButtonOff]}
-          >
+        <TouchableOpacity onPress={() => setactiveflag(true)}>
+          <Text style={[activeflag ? Style.togglebtnOn : Style.togglebtnOff]}>
             {" "}
             Income
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setActiveFlag(false)}>
-          <Text
-            style={[activeFlag ? Style.toggleButtonOff : Style.toggleButtonOn]}
-          >
+        <TouchableOpacity onPress={() => setactiveflag(false)}>
+          <Text style={[activeflag ? Style.togglebtnOff : Style.togglebtnOn]}>
             {" "}
             Expense
           </Text>
         </TouchableOpacity>
       </View>
 
-      <View style={Style.textBoxes}>
+      <View style={Style.textboxes}>
         <TextInput
           style={Style.input}
           keyboardType="number-pad"
@@ -67,7 +130,7 @@ const Add = ({ isClicked }) => {
             setShowDatePicker(true);
           }}
         >
-          <Text style={Style.dateText}>{JSON.stringify(date)}</Text>
+          <Text style={Style.DateText}>{JSON.stringify(date)}</Text>
         </TouchableOpacity>
         {showDatePicker ? (
           <DateTimePicker
@@ -78,6 +141,7 @@ const Add = ({ isClicked }) => {
             onChange={(e, selectedDate) => {
               const currentDate =
                 dayjs(selectedDate).format("MMMM D, YYYY") || date;
+              console.log(currentDate);
               setDate(currentDate);
               setShowDatePicker(false);
             }}
@@ -90,7 +154,7 @@ const Add = ({ isClicked }) => {
             } else if (description === "" || description === null) {
               Toast.show("Please enter Description");
             } else {
-              Insert(description, amount, date, activeFlag);
+              Insert(description, amount, date, activeflag);
               isClicked();
             }
           }}
@@ -101,72 +165,5 @@ const Add = ({ isClicked }) => {
     </SafeAreaView>
   );
 };
-
-const Style = StyleSheet.create({
-  header: {
-    height: 100,
-    alignItems: "center",
-  },
-  title: {
-    margin: 15,
-    fontSize: 20,
-  },
-  toggle: {
-    flexDirection: "row",
-    alignSelf: "center",
-    marginHorizontal: 80,
-  },
-  toggleButtonOff: {
-    color: Color.yellow,
-    paddingVertical: 20,
-    paddingHorizontal: 20,
-    flex: 6,
-  },
-  toggleButtonOn: {
-    color: Color.white,
-    backgroundColor: Color.yellow,
-    paddingVertical: 20,
-    paddingHorizontal: 20,
-    flex: 6,
-    borderRadius: 12,
-  },
-  textBoxes: {
-    backgroundColor: Color.white,
-    flexDirection: "column",
-    height: 450,
-    marginTop: 15,
-  },
-  input: {
-    margin: 15,
-    height: 45,
-    borderColor: Color.grey,
-    borderRadius: 10,
-    borderWidth: 1,
-    paddingLeft: 8,
-    color: Color.lightBlack,
-  },
-  separator: {
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: Color.lightBlack,
-    height: 55,
-  },
-  save: {
-    paddingVertical: 15,
-    alignContent: "center",
-    color: Color.yellow,
-    fontWeight: "bold",
-    alignSelf: "center",
-  },
-  dateText: {
-    color: Color.lightBlack,
-    marginVertical: 8,
-  },
-  close: {
-    alignSelf: "flex-end",
-    position: "absolute",
-    right: 16,
-    top: 16,
-  },
-});
 
 export default Add;

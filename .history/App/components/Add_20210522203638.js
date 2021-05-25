@@ -3,60 +3,47 @@ import {
   View,
   Text,
   StyleSheet,
+  SafeAreaView,
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import * as SQLite from "expo-sqlite";
 import dayjs from "dayjs";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import Toast from "react-native-simple-toast";
-import { AntDesign } from "@expo/vector-icons";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import Color from "../constants/Colors";
-import { update } from "../data/databasehandler";
 
-const Edit = (props) => {
-  const db = SQLite.openDatabase("trackitdb.db");
-  const editTxt = "Edit ";
-  const [amount, setAmt] = useState(props.amt.toString());
-  const [description, setDescription] = useState(props.desc);
-  const [activeFlag, setActiveFlag] = useState(props.toggle);
-  const [date, setDate] = useState(dayjs(props.date).format("MMMM D, YYYY"));
+import { Insert } from "../data/databasehandler";
+
+const Add = ({ isClicked }) => {
+  const [amount, setAmt] = useState("");
+  const [description, setDesc] = useState("");
+  const [activeflag, setactiveflag] = useState(false);
+  const [date, setDate] = useState(dayjs().format("MMMM D, YYYY"));
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   return (
-    <View>
-      <Text style={Style.header}>
-        {editTxt}
-        {props.type}
-      </Text>
-
-      <View style={Style.close}>
-        <TouchableOpacity onPress={() => props.close()}>
-          <AntDesign name="close" size={24} color="gray" />
-        </TouchableOpacity>
+    <SafeAreaView>
+      <View style={Style.header}>
+        <Text style={Style.title}> Add Income/Expense</Text>
       </View>
 
       {/* Custom Toggle for Type */}
       <View style={Style.toggle}>
-        <TouchableOpacity onPress={() => setActiveFlag(true)}>
-          <Text
-            style={[activeFlag ? Style.toggleButtonOn : Style.toggleButtonOff]}
-          >
+        <TouchableOpacity onPress={() => setactiveflag(true)}>
+          <Text style={[activeflag ? Style.togglebtnOn : Style.togglebtnOff]}>
             {" "}
             Income
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setActiveFlag(false)}>
-          <Text
-            style={[activeFlag ? Style.toggleButtonOff : Style.toggleButtonOn]}
-          >
+        <TouchableOpacity onPress={() => setactiveflag(false)}>
+          <Text style={[activeflag ? Style.togglebtnOff : Style.togglebtnOn]}>
             {" "}
             Expense
           </Text>
         </TouchableOpacity>
       </View>
 
-      <View style={Style.textBoxes}>
+      <View style={Style.textboxes}>
         <TextInput
           style={Style.input}
           keyboardType="number-pad"
@@ -64,10 +51,9 @@ const Edit = (props) => {
           value={amount}
           placeholder="Amount"
         />
-
         <TextInput
           style={Style.input}
-          onChangeText={setDescription}
+          onChangeText={setDesc}
           value={description}
           placeholder="Description"
         />
@@ -77,7 +63,7 @@ const Edit = (props) => {
             setShowDatePicker(true);
           }}
         >
-          <Text style={Style.dateText}>{JSON.stringify(date)}</Text>
+          <Text style={Style.DateText}>{JSON.stringify(date)}</Text>
         </TouchableOpacity>
         {showDatePicker ? (
           <DateTimePicker
@@ -88,12 +74,12 @@ const Edit = (props) => {
             onChange={(e, selectedDate) => {
               const currentDate =
                 dayjs(selectedDate).format("MMMM D, YYYY") || date;
+              console.log(currentDate);
               setDate(currentDate);
               setShowDatePicker(false);
             }}
           />
         ) : null}
-
         <TouchableOpacity
           onPress={() => {
             if (amount === "" || amount === null) {
@@ -101,33 +87,49 @@ const Edit = (props) => {
             } else if (description === "" || description === null) {
               Toast.show("Please enter Description");
             } else {
-              // Toast.show("Valid Data");
-              props.close();
-              update({ db }, props.id, amount, description, date, activeFlag);
+              Insert(description, amount, date, activeflag);
+              isClicked();
             }
           }}
         >
           <Text style={Style.save}>Save</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
+export default Add;
+
 const Style = StyleSheet.create({
   header: {
+    height: 100,
+    alignItems: "center",
+  },
+  title: {
+    margin: 15,
+    fontSize: 20,
+  },
+  toggle: {
+    flexDirection: "row",
     alignSelf: "center",
-    marginTop: 16,
-    color: Color.lightBlack,
-    fontSize: 18,
+    marginHorizontal: 80,
   },
-  close: {
-    alignSelf: "flex-end",
-    right: 16,
-    top: 16,
-    position: "absolute",
+  togglebtnOff: {
+    color: Color.yellow,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    flex: 6,
   },
-  textBoxes: {
+  togglebtnOn: {
+    color: Color.white,
+    backgroundColor: Color.yellow,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    flex: 6,
+    borderRadius: 12,
+  },
+  textboxes: {
     backgroundColor: Color.white,
     flexDirection: "column",
     height: 450,
@@ -142,7 +144,7 @@ const Style = StyleSheet.create({
     paddingLeft: 8,
     color: Color.lightBlack,
   },
-  separator: {
+  saperator: {
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: Color.lightBlack,
     height: 55,
@@ -154,29 +156,14 @@ const Style = StyleSheet.create({
     fontWeight: "bold",
     alignSelf: "center",
   },
-  dateText: {
+  DateText: {
     color: Color.lightBlack,
     marginVertical: 8,
   },
-  toggle: {
-    marginVertical: 30,
-    flexDirection: "row",
-    alignSelf: "center",
-    marginHorizontal: 80,
-  },
-  toggleButtonOff: {
-    color: Color.yellow,
-    paddingVertical: 20,
-    paddingHorizontal: 20,
-    flex: 6,
-  },
-  toggleButtonOn: {
-    color: Color.white,
-    backgroundColor: Color.yellow,
-    paddingVertical: 20,
-    paddingHorizontal: 20,
-    flex: 6,
-    borderRadius: 12,
+  close: {
+    alignSelf: "flex-end",
+    position: "absolute",
+    right: 16,
+    top: 16,
   },
 });
-export default Edit;

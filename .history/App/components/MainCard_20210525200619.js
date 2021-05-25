@@ -42,13 +42,10 @@ const MainCard = ({ statevar }) => {
     <SafeAreaView style={Style.container}>
       <View style={Style.child}>
         <Text style={Style.titles}>Balance</Text>
-        <Text style={Style.balanceText}>
-          {"\u20B9"}
-          {income - expense}
-        </Text>
+        <Text style={Style.balanceText}>{"\u20B9&{income - expense}"}</Text>
       </View>
 
-      <View style={Style.separator} />
+      <View style={Style.saperator} />
 
       <View style={Style.child}>
         <View style={Style.innerChild}>
@@ -60,10 +57,7 @@ const MainCard = ({ statevar }) => {
         </View>
 
         <View style={Style.innerChild}>
-          <Text style={Style.expenseText}>
-            {"\u20B9"}
-            {expense}
-          </Text>
+          <Text style={Style.expenseText}>{"\u20B9&{expense}"}</Text>
           <Text style={Style.titles}>Expense</Text>
         </View>
       </View>
@@ -105,7 +99,7 @@ const Style = StyleSheet.create({
   titles: {
     color: Colors.lightBlack,
   },
-  separator: {
+  saperator: {
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: Colors.grey,
     marginVertical: 15,

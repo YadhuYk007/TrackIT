@@ -6,9 +6,9 @@ import Colors from "../constants/Colors";
 const MainCard = ({ statevar }) => {
   const db = SQLite.openDatabase("trackitdb.db");
 
-  const [expense, setExpense] = useState(0);
+  const [expense, setexpense] = useState(0);
 
-  const [income, setIncome] = useState(0);
+  const [income, setincome] = useState(0);
 
   React.useEffect(() => {
     db.transaction((tx) => {
@@ -16,19 +16,19 @@ const MainCard = ({ statevar }) => {
         "select sum(amount) as income from transactions where type='Income' or type='income'",
         null,
         (_, results) => {
-          setIncome(
+          setincome(
             results.rows._array[0].income > 0
               ? results.rows._array[0].income
               : 0
           );
-          setExpense(income - expense);
+          setexpense(income - expense);
         }
       );
       tx.executeSql(
         "select sum(amount) as expense from transactions where type='Expense' or type='expense'",
         null,
         (_, results) => {
-          setExpense(
+          setexpense(
             results.rows._array[0].expense > 0
               ? results.rows._array[0].expense
               : 0
@@ -48,7 +48,7 @@ const MainCard = ({ statevar }) => {
         </Text>
       </View>
 
-      <View style={Style.separator} />
+      <View style={Style.saperator} />
 
       <View style={Style.child}>
         <View style={Style.innerChild}>
@@ -105,7 +105,7 @@ const Style = StyleSheet.create({
   titles: {
     color: Colors.lightBlack,
   },
-  separator: {
+  saperator: {
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: Colors.grey,
     marginVertical: 15,

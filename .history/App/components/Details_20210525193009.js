@@ -20,7 +20,8 @@ const Details = (props) => {
     Toast.show("Deleted");
     props.onDelete();
     deleteData({ db }, props.id).catch(function (error) {
-      Toast.show("Some error occurred...Please try again");
+      Toast.show("Some error occured...Please try again");
+      console.log(`Error ${error.message}`);
     });
     props.close();
   };

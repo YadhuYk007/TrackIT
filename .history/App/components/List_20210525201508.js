@@ -50,7 +50,7 @@ const List = ({
         setListData(groupedData);
       })
       .catch(function (error) {
-        console.log("Error occurred while fetching data..Please try later");
+        Toast.show("Error occurred while fetching data..Please try later");
       });
   };
 

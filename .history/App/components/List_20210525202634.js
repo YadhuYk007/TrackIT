@@ -32,26 +32,22 @@ const List = ({
 
     /* Fetching data from db and sorting */
 
-    getData({ db })
-      .then((_array) => {
-        _array.forEach((element) => {
-          dateArr.push({ title: element.date, data: element });
-        });
-        const groupedData = _(dateArr)
-          .groupBy("title")
-          .map((details, title) => {
-            const data = details.map((detail) => detail.data);
-            return {
-              title,
-              data,
-            };
-          })
-          .value();
-        setListData(groupedData);
-      })
-      .catch(function (error) {
-        console.log("Error occurred while fetching data..Please try later");
+    getData({ db }).then((_array) => {
+      _array.forEach((element) => {
+        dateArr.push({ title: element.date, data: element });
       });
+      const groupedData = _(dateArr)
+        .groupBy("title")
+        .map((details, title) => {
+          const data = details.map((detail) => detail.data);
+          return {
+            title,
+            data,
+          };
+        })
+        .value();
+      setListData(groupedData);
+    });
   };
 
   const checkToday = (date) => {

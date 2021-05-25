@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import _ from "lodash";
 import * as SQLite from "expo-sqlite";
-import Toast from "react-native-simple-toast";
 import dayjs from "dayjs";
 import colors from "../constants/Colors";
 import { getData } from "../data/databasehandler";
@@ -25,7 +24,7 @@ const List = ({
 }) => {
   const db = SQLite.openDatabase("trackitdb.db");
 
-  const [listData, setListData] = useState(null);
+  const [listData, setlistData] = useState(null);
 
   const loadDetails = () => {
     const dateArr = [];
@@ -47,10 +46,10 @@ const List = ({
             };
           })
           .value();
-        setListData(groupedData);
+        setlistData(groupedData);
       })
       .catch(function (error) {
-        console.log("Error occurred while fetching data..Please try later");
+        console.log(`Error ${error.message}`);
       });
   };
 
@@ -78,7 +77,7 @@ const List = ({
           return (
             <View style={styles.emptyList}>
               <Text style={{ color: colors.lightBlack }}>
-                Please add entries to start tracking...
+                Please add Entries to start tracking...
               </Text>
             </View>
           );
@@ -123,7 +122,8 @@ const List = ({
                       },
                 ]}
               >
-                {"\u20B9&{item.amount}"}
+                {"\u20B9"}
+                {item.amount}
               </Text>
             </View>
           </TouchableOpacity>

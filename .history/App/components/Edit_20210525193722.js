@@ -15,6 +15,7 @@ import Color from "../constants/Colors";
 import { update } from "../data/databasehandler";
 
 const Edit = (props) => {
+  console.log(JSON.stringify(props));
   const db = SQLite.openDatabase("trackitdb.db");
   const editTxt = "Edit ";
   const [amount, setAmt] = useState(props.amt.toString());
@@ -88,6 +89,7 @@ const Edit = (props) => {
             onChange={(e, selectedDate) => {
               const currentDate =
                 dayjs(selectedDate).format("MMMM D, YYYY") || date;
+              console.log(currentDate);
               setDate(currentDate);
               setShowDatePicker(false);
             }}
