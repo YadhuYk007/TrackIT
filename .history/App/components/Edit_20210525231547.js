@@ -3,30 +3,35 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   TextInput,
   TouchableOpacity,
 } from "react-native";
+import * as SQLite from "expo-sqlite";
 import dayjs from "dayjs";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import Toast from "react-native-simple-toast";
 import { AntDesign } from "@expo/vector-icons";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import Color from "../constants/Colors";
+import { update } from "../data/databasehandler";
 
-import { Insert } from "../data/databasehandler";
-
-const Add = ({ isClicked, close }) => {
-  const [amount, setAmt] = useState("");
-  const [description, setDesc] = useState("");
-  const [activeFlag, setActiveFlag] = useState(false);
-  const [date, setDate] = useState(dayjs().format("MMMM D, YYYY"));
+const Edit = (props) => {
+  const db = SQLite.openDatabase("trackitdb.db");
+  const editTxt = "Edit ";
+  const [amount, setAmt] = useState(props.amt.toString());
+  const [description, setDescription] = useState(props.desc);
+  const [activeFlag, setActiveFlag] = useState(props.toggle);
+  const [date, setDate] = useState(dayjs(props.date).format("MMMM D, YYYY"));
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   return (
-    <SafeAreaView>
-      <Text style={Style.header}> Add Income/Expense</Text>
+    <View>
+      <Text style={Style.header}>
+        {editTxt}
+        {props.type}
+      </Text>
+
       <View style={Style.close}>
-        <TouchableOpacity onPress={() => close()}>
+        <TouchableOpacity onPress={() => props.close()}>
           <AntDesign name="close" size={24} color="gray" />
         </TouchableOpacity>
       </View>
@@ -57,9 +62,10 @@ const Add = ({ isClicked, close }) => {
           value={amount}
           placeholder="Amount"
         />
+
         <TextInput
           style={Style.input}
-          onChangeText={setDesc}
+          onChangeText={setDescription}
           value={description}
           placeholder="Description"
         />
@@ -69,12 +75,12 @@ const Add = ({ isClicked, close }) => {
             setShowDatePicker(true);
           }}
         >
-          <Text style={Style.dateText}>{date}</Text>
+          <Text style={Style.dateText}>{JSON.stringify(date)}</Text>
         </TouchableOpacity>
-        {showDatePicker && (
+        {showDatePicker ? (
           <DateTimePicker
             testID="dateTimePicker"
-            value={new Date(date)}
+            value="Date???"
             mode="date"
             display="default"
             onChange={(e, selectedDate) => {
@@ -84,7 +90,8 @@ const Add = ({ isClicked, close }) => {
               setShowDatePicker(false);
             }}
           />
-        )}
+        ) : null}
+
         <TouchableOpacity
           onPress={() => {
             if (amount === "" || amount === null) {
@@ -94,15 +101,15 @@ const Add = ({ isClicked, close }) => {
             } else if (description === "" || description === null) {
               Toast.show("Please enter Description");
             } else {
-              Insert(description, amount, date, activeFlag);
-              isClicked();
+              props.close();
+              update({ db }, props.id, amount, description, date, activeFlag);
             }
           }}
         >
           <Text style={Style.save}>Save</Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -171,5 +178,4 @@ const Style = StyleSheet.create({
     borderRadius: 12,
   },
 });
-
-export default Add;
+export default Edit;

@@ -99,10 +99,22 @@ const List = ({
               <Text style={styles.description}>{item.description}</Text>
               <Text
                 style={[
-                  item.type === "Income" ? styles.income : styles.expense,
+                  item.type === "Income"
+                    ? {
+                        alignSelf: "center",
+                        marginHorizontal: 16,
+                        color: colors.green,
+                        fontSize: 16,
+                      }
+                    : {
+                        alignSelf: "center",
+                        marginHorizontal: 16,
+                        color: colors.red,
+                        fontSize: 16,
+                      },
                 ]}
               >
-                {`$${item.amount}`}
+                {`$ ${item.amount}`}
               </Text>
             </View>
           </TouchableOpacity>
@@ -143,18 +155,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginHorizontal: 16,
     color: colors.lightBlack,
-    fontSize: 16,
-  },
-  income: {
-    alignSelf: "center",
-    marginHorizontal: 16,
-    color: colors.green,
-    fontSize: 16,
-  },
-  expense: {
-    alignSelf: "center",
-    marginHorizontal: 16,
-    color: colors.red,
     fontSize: 16,
   },
 });

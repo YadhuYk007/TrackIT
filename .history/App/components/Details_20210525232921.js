@@ -13,16 +13,16 @@ import Toast from "react-native-simple-toast";
 import Color from "../constants/Colors";
 import { deleteData } from "../data/databasehandler";
 
-const Details = ({ id, desc, amt, date, type, close, onEdit, onDelete }) => {
+const Details = (props) => {
   const db = SQLite.openDatabase("trackitdb.db");
 
   const executeDelete = () => {
     Toast.show("Deleted");
-    onDelete();
-    deleteData({ db }, id).catch(function (error) {
+    props.onDelete();
+    deleteData({ db }, props.id).catch(function (error) {
       Toast.show("Some error occurred...Please try again");
     });
-    close();
+    props.close();
   };
 
   const deleteItem = () => {
@@ -38,21 +38,23 @@ const Details = ({ id, desc, amt, date, type, close, onEdit, onDelete }) => {
 
   return (
     <View>
-      <Text style={Style.header}>{type}</Text>
+      <Text style={Style.header}>{props.type}</Text>
       <SafeAreaView style={Style.close}>
-        <TouchableOpacity onPress={() => close()}>
+        <TouchableOpacity onPress={() => props.close()}>
           <AntDesign name="close" size={24} color="gray" />
         </TouchableOpacity>
       </SafeAreaView>
       <Text
-        style={type === "Income" ? Style.incomeAmount : Style.expenseAmount}
+        style={
+          props.type === "Income" ? Style.incomeAmount : Style.expenseAmount
+        }
       >
-        {`$ ${amt}`}
+        {`$ ${props.amt}`}
       </Text>
 
-      <Text style={Style.description}>{desc}</Text>
-      <Text style={Style.date}>{date}</Text>
-      <TouchableOpacity onPress={onEdit}>
+      <Text style={Style.description}>{props.desc}</Text>
+      <Text style={Style.date}>{props.date}</Text>
+      <TouchableOpacity onPress={props.onEdit}>
         <Text style={Style.edit}>Edit</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => deleteItem()}>

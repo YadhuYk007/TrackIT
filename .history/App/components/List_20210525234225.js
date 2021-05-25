@@ -102,7 +102,7 @@ const List = ({
                   item.type === "Income" ? styles.income : styles.expense,
                 ]}
               >
-                {`$${item.amount}`}
+                {`$ ${item.amount}`}
               </Text>
             </View>
           </TouchableOpacity>

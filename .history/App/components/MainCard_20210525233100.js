@@ -54,7 +54,10 @@ const MainCard = ({ statevar }) => {
         </View>
 
         <View style={Style.innerChild}>
-          <Text style={Style.expenseText}>{`$${expense}`}</Text>
+          <Text style={Style.expenseText}>
+            {"\u20B9"}
+            {expense}
+          </Text>
           <Text style={Style.titles}>Expense</Text>
         </View>
       </View>

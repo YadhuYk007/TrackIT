@@ -26,7 +26,7 @@ const Add = ({ isClicked, close }) => {
     <SafeAreaView>
       <Text style={Style.header}> Add Income/Expense</Text>
       <View style={Style.close}>
-        <TouchableOpacity onPress={() => close()}>
+        <TouchableOpacity onPress={() => props.close()}>
           <AntDesign name="close" size={24} color="gray" />
         </TouchableOpacity>
       </View>
@@ -71,7 +71,7 @@ const Add = ({ isClicked, close }) => {
         >
           <Text style={Style.dateText}>{date}</Text>
         </TouchableOpacity>
-        {showDatePicker && (
+        {showDatePicker ? (
           <DateTimePicker
             testID="dateTimePicker"
             value={new Date(date)}
@@ -84,12 +84,12 @@ const Add = ({ isClicked, close }) => {
               setShowDatePicker(false);
             }}
           />
-        )}
+        ) : null}
         <TouchableOpacity
           onPress={() => {
             if (amount === "" || amount === null) {
               Toast.show("Please enter Amount");
-            } else if (!/^\d+$/.test(amount)) {
+            } else if (/^\d+$/.test(amount)) {
               Toast.show("Invalid amount value");
             } else if (description === "" || description === null) {
               Toast.show("Please enter Description");

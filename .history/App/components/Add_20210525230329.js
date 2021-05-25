@@ -9,13 +9,12 @@ import {
 } from "react-native";
 import dayjs from "dayjs";
 import Toast from "react-native-simple-toast";
-import { AntDesign } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Color from "../constants/Colors";
 
 import { Insert } from "../data/databasehandler";
 
-const Add = ({ isClicked, close }) => {
+const Add = ({ isClicked }) => {
   const [amount, setAmt] = useState("");
   const [description, setDesc] = useState("");
   const [activeFlag, setActiveFlag] = useState(false);
@@ -24,11 +23,8 @@ const Add = ({ isClicked, close }) => {
 
   return (
     <SafeAreaView>
-      <Text style={Style.header}> Add Income/Expense</Text>
-      <View style={Style.close}>
-        <TouchableOpacity onPress={() => close()}>
-          <AntDesign name="close" size={24} color="gray" />
-        </TouchableOpacity>
+      <View style={Style.header}>
+        <Text style={Style.title}> Add Income/Expense</Text>
       </View>
       <View style={Style.toggle}>
         <TouchableOpacity onPress={() => setActiveFlag(true)}>
@@ -69,12 +65,12 @@ const Add = ({ isClicked, close }) => {
             setShowDatePicker(true);
           }}
         >
-          <Text style={Style.dateText}>{date}</Text>
+          <Text style={Style.dateText}>{JSON.stringify(date)}</Text>
         </TouchableOpacity>
-        {showDatePicker && (
+        {showDatePicker ? (
           <DateTimePicker
             testID="dateTimePicker"
-            value={new Date(date)}
+            value={date}
             mode="date"
             display="default"
             onChange={(e, selectedDate) => {
@@ -84,12 +80,12 @@ const Add = ({ isClicked, close }) => {
               setShowDatePicker(false);
             }}
           />
-        )}
+        ) : null}
         <TouchableOpacity
           onPress={() => {
             if (amount === "" || amount === null) {
               Toast.show("Please enter Amount");
-            } else if (!/^\d+$/.test(amount)) {
+            } else if (/^\d+$/.test(amount)) {
               Toast.show("Invalid amount value");
             } else if (description === "" || description === null) {
               Toast.show("Please enter Description");
@@ -108,16 +104,31 @@ const Add = ({ isClicked, close }) => {
 
 const Style = StyleSheet.create({
   header: {
-    alignSelf: "center",
-    marginTop: 16,
-    color: Color.lightBlack,
-    fontSize: 18,
+    height: 100,
+    alignItems: "center",
   },
-  close: {
-    alignSelf: "flex-end",
-    right: 16,
-    top: 16,
-    position: "absolute",
+  title: {
+    margin: 15,
+    fontSize: 20,
+  },
+  toggle: {
+    flexDirection: "row",
+    alignSelf: "center",
+    marginHorizontal: 80,
+  },
+  toggleButtonOff: {
+    color: Color.yellow,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    flex: 6,
+  },
+  toggleButtonOn: {
+    color: Color.white,
+    backgroundColor: Color.yellow,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    flex: 6,
+    borderRadius: 12,
   },
   textBoxes: {
     backgroundColor: Color.white,
@@ -150,25 +161,11 @@ const Style = StyleSheet.create({
     color: Color.lightBlack,
     marginVertical: 8,
   },
-  toggle: {
-    marginVertical: 30,
-    flexDirection: "row",
-    alignSelf: "center",
-    marginHorizontal: 80,
-  },
-  toggleButtonOff: {
-    color: Color.yellow,
-    paddingVertical: 20,
-    paddingHorizontal: 20,
-    flex: 6,
-  },
-  toggleButtonOn: {
-    color: Color.white,
-    backgroundColor: Color.yellow,
-    paddingVertical: 20,
-    paddingHorizontal: 20,
-    flex: 6,
-    borderRadius: 12,
+  close: {
+    alignSelf: "flex-end",
+    position: "absolute",
+    right: 16,
+    top: 16,
   },
 });
 

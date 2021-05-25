@@ -71,7 +71,7 @@ const Add = ({ isClicked, close }) => {
         >
           <Text style={Style.dateText}>{date}</Text>
         </TouchableOpacity>
-        {showDatePicker && (
+        {showDatePicker ? (
           <DateTimePicker
             testID="dateTimePicker"
             value={new Date(date)}
@@ -84,7 +84,7 @@ const Add = ({ isClicked, close }) => {
               setShowDatePicker(false);
             }}
           />
-        )}
+        ) : null}
         <TouchableOpacity
           onPress={() => {
             if (amount === "" || amount === null) {

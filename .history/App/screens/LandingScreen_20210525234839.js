@@ -64,7 +64,9 @@ const LandingScreen = () => {
           }}
         />
       </Modalize>
-      {saveClicked && afterClick()}
+      {saveClicked ? modalizeRef.current?.close() : null}
+      {saveClicked ? setSaveClicked(false) : null}
+      {saveClicked ? setTrigger(trigger + 1) : null}
 
       {/* BottomSheet for displaying Details */}
       <Modalize ref={DetailsRef} withHandle={false}>

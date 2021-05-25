@@ -20,12 +20,6 @@ const LandingScreen = () => {
   const modalizeRef = useRef(null);
   const detailsModalizeRef = useRef(null);
   const DetailsRef = useRef(null);
-
-  const afterClick = () => {
-    modalizeRef.current?.close();
-    setSaveClicked(false);
-    setTrigger(trigger + 1);
-  };
   return (
     <SafeAreaView style={Style.mainContainer}>
       <StatusBar backgroundColor={Colors.yellow} />
@@ -57,14 +51,11 @@ const LandingScreen = () => {
 
       {/* BottomSheet for Adding Item */}
       <Modalize ref={modalizeRef} withHandle={false}>
-        <Add
-          isClicked={() => setSaveClicked(true)}
-          close={() => {
-            return modalizeRef.current?.close();
-          }}
-        />
+        <Add isClicked={() => setSaveClicked(true)} />
       </Modalize>
-      {saveClicked && afterClick()}
+      {saveClicked ? modalizeRef.current?.close() : null}
+      {saveClicked ? setSaveClicked(false) : null}
+      {saveClicked ? setTrigger(trigger + 1) : null}
 
       {/* BottomSheet for displaying Details */}
       <Modalize ref={DetailsRef} withHandle={false}>
