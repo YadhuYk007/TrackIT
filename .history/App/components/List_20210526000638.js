@@ -28,6 +28,8 @@ const List = ({
   const loadDetails = () => {
     const dateArr = [];
 
+    /* Fetching data from db and sorting */
+
     getData({ db }).then((_array) => {
       _array.forEach((element) => {
         dateArr.push({ title: element.date, data: element });
@@ -50,6 +52,7 @@ const List = ({
     const today = dayjs().format("MMMM D, YYYY");
     if (date === today) {
       return "Today";
+      // eslint-disable-next-line no-else-return
     } else {
       return date;
     }

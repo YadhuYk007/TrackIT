@@ -1,3 +1,4 @@
+/* eslint-disable no-lone-blocks */
 import React, { useEffect, useState } from "react";
 import {
   SectionList,
@@ -8,6 +9,7 @@ import {
 } from "react-native";
 import _ from "lodash";
 import * as SQLite from "expo-sqlite";
+import Toast from "react-native-simple-toast";
 import dayjs from "dayjs";
 import colors from "../constants/Colors";
 import { getData } from "../data/databasehandler";
@@ -27,6 +29,8 @@ const List = ({
 
   const loadDetails = () => {
     const dateArr = [];
+
+    /* Fetching data from db and sorting */
 
     getData({ db }).then((_array) => {
       _array.forEach((element) => {
@@ -50,6 +54,7 @@ const List = ({
     const today = dayjs().format("MMMM D, YYYY");
     if (date === today) {
       return "Today";
+      // eslint-disable-next-line no-else-return
     } else {
       return date;
     }

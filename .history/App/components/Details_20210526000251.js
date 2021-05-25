@@ -19,7 +19,7 @@ const Details = ({ id, desc, amt, date, type, close, onEdit, onDelete }) => {
   const executeDelete = () => {
     Toast.show("Deleted");
     onDelete();
-    deleteData({ db }, id);
+    await deleteData({ db }, id);
     close();
   };
 

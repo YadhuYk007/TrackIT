@@ -28,6 +28,8 @@ const List = ({
   const loadDetails = () => {
     const dateArr = [];
 
+    /* Fetching data from db and sorting */
+
     getData({ db }).then((_array) => {
       _array.forEach((element) => {
         dateArr.push({ title: element.date, data: element });

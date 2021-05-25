@@ -1,6 +1,7 @@
 import * as SQLite from "expo-sqlite";
 import Toast from "react-native-simple-toast";
 
+// inserting transaction data
 export const Insert = (description, amount, date, type) => {
   const db = SQLite.openDatabase("trackitdb.db");
 
@@ -30,7 +31,8 @@ export const Insert = (description, amount, date, type) => {
   });
 };
 
-export const getData = ({ db }) => {
+// fetching all saved data
+export const getData = async ({ db }) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
@@ -46,7 +48,8 @@ export const getData = ({ db }) => {
   return promise;
 };
 
-export const deleteData = ({ db }, id) => {
+// deleting a transaction from list
+export const deleteData = async ({ db }, id) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
@@ -62,7 +65,15 @@ export const deleteData = ({ db }, id) => {
   return promise;
 };
 
-export const update = ({ db }, id, amount, description, date, typeFlag) => {
+// for updating data from list
+export const update = async (
+  { db },
+  id,
+  amount,
+  description,
+  date,
+  typeFlag
+) => {
   let expenseType = "";
   if (typeFlag === true) {
     expenseType = "Income";

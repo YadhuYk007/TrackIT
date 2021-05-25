@@ -19,7 +19,9 @@ const Details = ({ id, desc, amt, date, type, close, onEdit, onDelete }) => {
   const executeDelete = () => {
     Toast.show("Deleted");
     onDelete();
-    deleteData({ db }, id);
+    deleteData({ db }, id).catch(function (error) {
+      Toast.show("Some error occurred...Please try again");
+    });
     close();
   };
 
