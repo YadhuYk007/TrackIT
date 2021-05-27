@@ -67,7 +67,7 @@ const List = ({
         ListFooterComponent={<View style={{ height: 52 }} />}
         ListEmptyComponent={() => {
           return (
-            <View style={styles.emptyList}>
+            <View style={Style.emptyList}>
               <Text style={{ color: colors.lightBlack }}>
                 Please add entries to start tracking...
               </Text>
@@ -86,12 +86,10 @@ const List = ({
               clicked();
             }}
           >
-            <View style={styles.sectionListItem}>
-              <Text style={styles.description}>{item.description}</Text>
+            <View style={Style.sectionListItem}>
+              <Text style={Style.description}>{item.description}</Text>
               <Text
-                style={[
-                  item.type === "Income" ? styles.income : styles.expense,
-                ]}
+                style={[item.type === "Income" ? Style.income : Style.expense]}
               >
                 {`$${item.amount}`}
               </Text>
@@ -99,7 +97,7 @@ const List = ({
           </TouchableOpacity>
         )}
         renderSectionHeader={({ section }) => (
-          <Text style={styles.sectionHeader}>{checkToday(section.title)}</Text>
+          <Text style={Style.sectionHeader}>{checkToday(section.title)}</Text>
         )}
         keyExtractor={(item, index) => index + item}
       />
@@ -107,7 +105,7 @@ const List = ({
   );
 };
 
-const styles = StyleSheet.create({
+const Style = StyleSheet.create({
   emptyList: {
     marginVertical: 120,
     alignSelf: "center",

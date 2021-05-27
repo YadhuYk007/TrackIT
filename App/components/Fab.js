@@ -3,7 +3,15 @@ import { StyleSheet, TouchableOpacity } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import Color from "../constants/Colors";
 
-const styles = StyleSheet.create({
+const Fab = ({ onOpen }) => {
+  return (
+    <TouchableOpacity style={Style.fab} onPress={() => onOpen()}>
+      <Entypo name="plus" size={35} color="white" />
+    </TouchableOpacity>
+  );
+};
+
+const Style = StyleSheet.create({
   fab: {
     width: 70,
     height: 70,
@@ -15,13 +23,4 @@ const styles = StyleSheet.create({
     bottom: 15,
   },
 });
-
-const Fab = ({ onOpen }) => {
-  return (
-    <TouchableOpacity style={styles.fab} onPress={() => onOpen()}>
-      <Entypo name="plus" size={35} color="white" />
-    </TouchableOpacity>
-  );
-};
-
 export default Fab;

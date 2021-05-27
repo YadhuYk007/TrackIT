@@ -37,7 +37,6 @@ const LandingScreen = () => {
         <MainCard statevar={trigger} />
       </View>
 
-      {/* Loading Section List */}
       <View style={Style.list}>
         <List
           invoker={trigger}
@@ -50,12 +49,10 @@ const LandingScreen = () => {
         />
       </View>
 
-      {/* Fab Component */}
       <View style={Style.fab}>
         <Fab onOpen={() => modalizeRef.current?.open()} />
       </View>
 
-      {/* BottomSheet for Adding Item */}
       <Modalize ref={modalizeRef} withHandle={false}>
         <Add
           isClicked={() => setSaveClicked(true)}
@@ -66,7 +63,6 @@ const LandingScreen = () => {
       </Modalize>
       {saveClicked && afterClick()}
 
-      {/* BottomSheet for displaying Details */}
       <Modalize ref={DetailsRef} withHandle={false}>
         <Details
           id={id}
@@ -87,7 +83,6 @@ const LandingScreen = () => {
         />
       </Modalize>
 
-      {/* BottomSheet for Edit Item */}
       <Modalize ref={detailsModalizeRef} withHandle={false}>
         <Edit
           id={id}
@@ -95,7 +90,6 @@ const LandingScreen = () => {
           date={itemDate}
           desc={description}
           amt={amount}
-          // eslint-disable-next-line no-unneeded-ternary
           toggle={type === "Income" ? true : false}
           close={() => {
             setTrigger(trigger + 1);
